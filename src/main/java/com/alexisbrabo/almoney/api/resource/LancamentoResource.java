@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,7 +35,7 @@ import com.alexisbrabo.almoney.api.service.exception.PessoaInexistenteOuInativaE
 
 @RestController
 @RequestMapping("/lancamentos")
-public class LancamentoResource {
+public class LancamentoResource { 
 
 	@Autowired
 	private LancamentoRepository lancamentoRepository;
@@ -45,8 +47,8 @@ public class LancamentoResource {
 	private MessageSource messageSource;
 
 	@GetMapping()
-	public List<Lancamento> pesquisar(LancamentoFilter lancamentoFilter) {
-		return lancamentoRepository.filtrar(lancamentoFilter);
+	public Page<Lancamento> pesquisar(LancamentoFilter lancamentoFilter, Pageable pageable) {
+		return lancamentoRepository.filtrar(lancamentoFilter, pageable);
 	}
 
 	@PostMapping
