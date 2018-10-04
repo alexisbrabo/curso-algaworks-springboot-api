@@ -27,6 +27,7 @@ import com.alexisbrabo.almoney.api.event.RecursoCriadoEvent;
 import com.alexisbrabo.almoney.api.exceptionHandler.AlgamoneyExceptionHandler.Erro;
 import com.alexisbrabo.almoney.api.model.Lancamento;
 import com.alexisbrabo.almoney.api.repository.LancamentoRepository;
+import com.alexisbrabo.almoney.api.repository.filter.LancamentoFilter;
 import com.alexisbrabo.almoney.api.service.LancamentoService;
 import com.alexisbrabo.almoney.api.service.exception.PessoaInexistenteOuInativaException;
 
@@ -44,8 +45,8 @@ public class LancamentoResource {
 	private MessageSource messageSource;
 
 	@GetMapping()
-	public List<Lancamento> listar() {
-		return lancamentoRepository.findAll();
+	public List<Lancamento> pesquisar(LancamentoFilter lancamentoFilter) {
+		return lancamentoRepository.filtrar(lancamentoFilter);
 	}
 
 	@PostMapping
