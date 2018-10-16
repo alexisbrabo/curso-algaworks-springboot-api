@@ -8,7 +8,7 @@ CREATE TABLE pessoa (
     cep VARCHAR(50),
     cidade VARCHAR(50),
     estado VARCHAR(50),
-    ativo SMALLINT
+    ativo BOOLEAN
 );
 
 INSERT INTO pessoa (nome, logradouro, numero, complemento, bairro, cep, cidade, estado, ativo) values ('João Silva', 'Rua do Abacaxi', '10', null, 'Brasil', '38.400-12', 'Uberlândia', 'MG', true);
