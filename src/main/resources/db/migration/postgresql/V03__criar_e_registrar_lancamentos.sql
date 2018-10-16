@@ -1,5 +1,5 @@
 CREATE TABLE lancamento (
-    codigo BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+    codigo BIGSERIAL(20) PRIMARY KEY,
     descricao VARCHAR(50) NOT NULL,
     data_vencimento DATE NOT NULL,
     data_pagamento DATE,

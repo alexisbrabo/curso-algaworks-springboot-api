@@ -1,5 +1,5 @@
 CREATE TABLE pessoa (
-    codigo BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+    codigo BIGSERIAL(20) PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
     logradouro VARCHAR(100),
     numero VARCHAR(50),

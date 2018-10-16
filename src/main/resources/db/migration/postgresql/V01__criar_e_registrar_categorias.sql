@@ -1,5 +1,5 @@
 CREATE TABLE categoria (
-    codigo BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+    codigo BIGSERIAL(20) PRIMARY KEY,
     nome VARCHAR(50) NOT NULL
 );
 
