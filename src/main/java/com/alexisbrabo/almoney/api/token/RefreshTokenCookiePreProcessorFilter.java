@@ -11,8 +11,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 
-import org.apache.catalina.servlet4preview.http.HttpServletRequestWrapper;
 import org.apache.catalina.util.ParameterMap;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -33,7 +33,7 @@ public class RefreshTokenCookiePreProcessorFilter implements Filter {
 			for (Cookie cookie : req.getCookies()) {
 				if (cookie.getName().equals("refreshToken")) {
 					String refreshToken = cookie.getValue();
-					req = new MyServletRequestWrapper(req, refreshToken);
+					req = (HttpServletRequest) new MyServletRequestWrapper(req, refreshToken);
 				}
 			}
 		}
