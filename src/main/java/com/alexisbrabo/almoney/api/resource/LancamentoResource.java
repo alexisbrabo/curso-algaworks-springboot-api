@@ -1,5 +1,6 @@
 package com.alexisbrabo.almoney.api.resource;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alexisbrabo.almoney.api.dto.LancamentoEstatisticaCategoria;
+import com.alexisbrabo.almoney.api.dto.LancamentoEstatisticaDia;
 import com.alexisbrabo.almoney.api.event.RecursoCriadoEvent;
 import com.alexisbrabo.almoney.api.exceptionHandler.AlgamoneyExceptionHandler.Erro;
 import com.alexisbrabo.almoney.api.model.Lancamento;
@@ -37,7 +40,7 @@ import com.alexisbrabo.almoney.api.service.exception.PessoaInexistenteOuInativaE
 
 @RestController
 @RequestMapping("/lancamentos")
-public class LancamentoResource { 
+public class LancamentoResource {
 
 	@Autowired
 	private LancamentoRepository lancamentoRepository;
@@ -48,12 +51,24 @@ public class LancamentoResource {
 	@Autowired
 	private MessageSource messageSource;
 
+	@GetMapping("/estatistica/por-dia")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
+	public List<LancamentoEstatisticaDia> porDia() {
+		return this.lancamentoRepository.porDia(LocalDate.now());
+	}
+
+	@GetMapping("/estatistica/por-categoria")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
+	public List<LancamentoEstatisticaCategoria> porCategoria() {
+		return this.lancamentoRepository.porCategoria(LocalDate.now());
+	}
+
 	@GetMapping
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
 	public Page<Lancamento> pesquisar(LancamentoFilter lancamentoFilter, Pageable pageable) {
 		return lancamentoRepository.filtrar(lancamentoFilter, pageable);
 	}
-	
+
 	@GetMapping(params = "resumo")
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
 	public Page<ResumoLancamento> resumir(LancamentoFilter lancamentoFilter, Pageable pageable) {
@@ -92,12 +107,13 @@ public class LancamentoResource {
 		return ResponseEntity.ok(lancamentoSalvo);
 	}
 
-	@ExceptionHandler({PessoaInexistenteOuInativaException.class})
-	public ResponseEntity<Object> handlePessoaInexistenteOuInativaException(PessoaInexistenteOuInativaException ex){
-		String mensagemUsuario = messageSource.getMessage("pessoa.inexistente-ou-inativa", null, LocaleContextHolder.getLocale());
+	@ExceptionHandler({ PessoaInexistenteOuInativaException.class })
+	public ResponseEntity<Object> handlePessoaInexistenteOuInativaException(PessoaInexistenteOuInativaException ex) {
+		String mensagemUsuario = messageSource.getMessage("pessoa.inexistente-ou-inativa", null,
+				LocaleContextHolder.getLocale());
 		String mensagemDesenvolvedor = ex.toString();
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
 		return ResponseEntity.badRequest().body(erros);
 	}
-	
+
 }
